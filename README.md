@@ -1,35 +1,28 @@
-# Báo cáo thực hành - TV4 (Nguyên): Đặt lịch tư vấn B2B
+Báo cáo thực hành - TV2 (Thanh): Thiết kế Giao diện & Bố cục Website B2B Venus Uniform
+Nhiệm vụ: Xây dựng, cấu hình giao diện và bố cục chi tiết cho các trang cốt lõi của website thương mại điện tử B2B (Trang chủ, Giới thiệu, Cửa hàng, Liên hệ, Tài khoản) trên nền tảng WordPress & WooCommerce, sử dụng Astra Theme và tuân thủ bộ nhận diện thương hiệu cao cấp.
 
-- **Nhiệm vụ:** Cấu hình plugin Bookly, tạo trang "Đặt lịch tư vấn".
-- **Chi tiết thực hiện:**
-  - Xóa toàn bộ dữ liệu mẫu (demo data) tiếng Anh của Bookly.
-  - Thiết lập thành công 5 danh mục & dịch vụ đồng phục B2B:
-    1. Đồng phục Công sở
-    2. Đồng phục Y tế & Spa
-    3. Đồng phục Áo thun & Sự kiện
-    4. Đồng phục Bảo hộ Lao động
-    5. Đồng phục Nhà hàng - Khách sạn
-  - Gắn shortcode `[bookly-form]` vào trang Đặt lịch tư vấn ngoài Front-end.
-- **Minh chứng:** Xem trong thư mục `screenshots/` bên dưới.
+Chi tiết thực hiện:
 
----
+Tùy chỉnh và ẩn tiêu đề mặc định: Ẩn toàn bộ header, tiêu đề thô mặc định của theme (header.entry-header, h1.entry-title) để đồng bộ hóa giao diện custom HTML/CSS toàn trang.
 
-## 🛠️ Hướng dẫn tích hợp nhanh (Sử dụng File Database có sẵn)
+Thiết kế Trang Chủ & Trang Cửa hàng (/san-pham):
 
-Toàn bộ dữ liệu cấu hình Bookly (5 danh mục dịch vụ B2B, lịch làm việc, trang đặt lịch) đã được tích hợp sẵn trong file database của dự án (`database/wp_dongphuc.sql`). 
+Xây dựng banner chào mừng đẳng cấp với tông màu tối (#0f172a) kết hợp điểm nhấn vàng gold (#b78628).
 
-Để đồng bộ dữ liệu vào máy local của bạn, chỉ cần làm theo 2 bước đơn giản sau:
+Thiết kế lưới sản phẩm (Product Grid) chuyên nghiệp hiển thị rõ ràng 5 danh mục chủ lực: Đồng phục Công sở, Đồng phục Y tế & Spa, Đồng phục Áo thun & Sự kiện, Đồng phục Bảo hộ Lao động, Đồng phục Nhà hàng - Khách sạn.
 
-### Bước 1: Kích hoạt Plugin Bookly
-1. Vào Quản trị WordPress (**Dashboard**) > **Plugins** > **Add New** (Thêm mới).
-2. Tìm kiếm từ khóa `Bookly`.
-3. Bấm **Install Now** (Cài đặt) và sau đó bấm **Activate** (Kích hoạt).
+Tích hợp các khối cam kết chất lượng, thiết kế 3D miễn phí và chính sách bảo hành 6 tháng.
 
-### Bước 2: Nhập (Import) Cơ sở dữ liệu của dự án
-1. Truy cập **phpMyAdmin** trên máy tính của bạn (`http://localhost/phpmyadmin`).
-2. Chọn cơ sở dữ liệu WordPress của dự án (`wp_dongphuc`).
-3. Chọn thẻ **Import** (Nhập).
-4. Bấm **Choose File** và chọn file `database/wp_dongphuc.sql` nằm trong thư mục nguồn của dự án.
-5. Bấm **Import** (hoặc *Go*) ở cuối trang để hoàn tất.
+Thiết kế Trang Liên hệ (/lien-he):
 
-👉 **Kết quả:** Sau khi import xong, toàn bộ 5 danh mục dịch vụ B2B và trang *Đặt lịch tư vấn* sẽ tự động hiển thị đầy đủ trên website của bạn mà không cần phải chỉnh sửa hay thiết lập lại thủ công!
+Bố cục 2 cột cân đối: Cột trái cung cấp thông tin trụ sở, hotline, giờ làm việc dạng thẻ nổi bật; Cột phải tích hợp form gửi yêu cầu tư vấn nhanh chuẩn B2B.
+
+Tùy chỉnh Trang Tài khoản Khách hàng (/tai-khoan):
+
+Đồng bộ hóa giao diện bảng điều khiển WooCommerce (My Account), thiết kế lại menu điều hướng bên trái và khung nội dung bên phải sang trọng, trực quan.
+
+Chuẩn hóa hệ thống Footer chân trang:
+
+Thiết kế chân trang đồng bộ trên toàn bộ hệ thống gồm 4 cột: Thông tin thương hiệu Venus Uniform, Liên kết nhanh, 5 Danh mục sản phẩm chủ lực và Trụ sở chính, kèm thông tin phát triển bởi Nhóm 5.
+
+Minh chứng: Xem chi tiết hình ảnh bố cục trong thư mục screenshots
