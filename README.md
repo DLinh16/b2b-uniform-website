@@ -20,7 +20,7 @@
 
 ---
 
-## 🛠️ Hướng dẫn tích hợp nhanh (Sử dụng File Database có sẵn)
+## Hướng dẫn tích hợp nhanh (Sử dụng File Database có sẵn)
 
 Toàn bộ dữ liệu cấu hình giao diện, cấu trúc trang (Trang chủ, Giới thiệu, Cửa hàng, Liên hệ, Tài khoản) và hệ thống footer đã được tích hợp sẵn trong file database của dự án (`database/wp_dongphuc.sql`)[cite: 8]. 
 
@@ -37,4 +37,4 @@ Toàn bộ dữ liệu cấu hình giao diện, cấu trúc trang (Trang chủ, 
 4. Bấm **Choose File** và chọn file `database/wp_dongphuc.sql` nằm trong thư mục nguồn của dự án[cite: 8].
 5. Bấm **Import** (hoặc *Go*) ở cuối trang để hoàn tất[cite: 8].
 
-👉 **Kết quả:** Sau khi import xong, toàn bộ giao diện các trang cốt lõi, bố cục 5 danh mục B2B và hệ thống footer của Thành viên 2 sẽ hiển thị hoàn chỉnh trên website của bạn[cite: 1, 8].
+**Kết quả:** Sau khi import xong, toàn bộ giao diện các trang cốt lõi, bố cục 5 danh mục B2B và hệ thống footer của Thành viên 2 sẽ hiển thị hoàn chỉnh trên website của bạn[cite: 1, 8].
