@@ -14,4 +14,4 @@
 
 | 4 | Akismet | Plugin | 5.7.2 | GPLv2 or later | wordpress.org |
 | 5 | WooCommerce | Plugin | 11.1.1 | GPLv3 | wordpress.org |
-| 6 | Bookly | Plugin | 22.8 | GPLv2 or later | wordpress.org |
+| 6 | Bookly | Plugin | 28.7 | GPLv2 or later | wordpress.org |
