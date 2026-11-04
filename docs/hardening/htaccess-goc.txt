@@ -1,0 +1,36 @@
+# BEGIN Nhom5 Hardening
+# 1. Tat duyet thu muc (Directory Browsing)
+Options -Indexes
+
+# 2. Tat xmlrpc.php (nhom khong dung app di dong / pingback)
+<Files "xmlrpc.php">
+    Require all denied
+</Files>
+
+# 3. Chan file nhay cam va file lo phien ban
+<FilesMatch "^(wp-config\.php|wp-config-sample\.php|readme\.html|license\.txt|\.htaccess)$">
+    Require all denied
+</FilesMatch>
+<FilesMatch "\.(log|bak|sql|ini|sh|md)$">
+    Require all denied
+</FilesMatch>
+
+# 4. Chan goi truc tiep file PHP noi bo cua WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /dongphuc/
+RewriteRule ^wp-admin/includes/ - [F,L]
+RewriteRule !^wp-includes/ - [S=3]
+RewriteRule ^wp-includes/[^/]+\.php$ - [F,L]
+RewriteRule ^wp-includes/js/tinymce/langs/.+\.php - [F,L]
+RewriteRule ^wp-includes/theme-compat/ - [F,L]
+</IfModule>
+
+# 5. Header bao mat co ban
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header unset X-Powered-By
+</IfModule>
+# END Nhom5 Hardening
