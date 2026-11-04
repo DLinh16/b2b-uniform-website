@@ -37,4 +37,16 @@ Toàn bộ dữ liệu cấu hình giao diện, cấu trúc trang (Trang chủ, 
 4. Bấm **Choose File** và chọn file `database/wp_dongphuc.sql` nằm trong thư mục nguồn của dự án[cite: 8].
 5. Bấm **Import** (hoặc *Go*) ở cuối trang để hoàn tất[cite: 8].
 
+> File SQL có sẵn lệnh `DROP TABLE IF EXISTS`, nên có thể import đè lên database cũ. Site URL trong database là `http://localhost/dongphuc`.
+
+### Bước 3: Chép ảnh sản phẩm (bắt buộc từ bản 16 sản phẩm)
+Thư mục `uploads` không nằm trong repo, nên ảnh sản phẩm (đã cắt sẵn tỉ lệ 4:5) được để riêng trong `database/anh-san-pham-4x5/`.
+Chép **toàn bộ** thư mục này thành:
+
+```
+C:\xampp\htdocs\dongphuc\wp-content\uploads\vu-sanpham\
+```
+
+Nếu không chép, ảnh sản phẩm ở trang Cửa hàng sẽ không hiển thị. Cách tạo lại ảnh và sản phẩm từ đầu xem trong `tools/` và `wp-content/themes/astra-child/DESIGN.md`.
+
 **Kết quả:** Sau khi import xong, toàn bộ giao diện các trang cốt lõi, bố cục 5 danh mục B2B và hệ thống footer của Thành viên 2 sẽ hiển thị hoàn chỉnh trên website của bạn[cite: 1, 8].

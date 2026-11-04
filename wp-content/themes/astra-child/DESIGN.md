@@ -38,6 +38,13 @@ Chuyển động giữ ở mức vừa phải, mỗi loại chỉ dùng một ki
 - Header có bóng nhẹ sau khi cuộn.
 - `prefers-reduced-motion` tắt toàn bộ chuyển động.
 
+## Trang sản phẩm
+
+- Ảnh sản phẩm luôn có tỉ lệ **4:5**. Ảnh mới nên cắt bằng `tools/cat-anh-san-pham.ps1`, rồi gắn vào sản phẩm bằng `tools/seed-san-pham.php`. PHP trên XAMPP không có GD nên WordPress không tự cắt ảnh được.
+- Thẻ sản phẩm gồm: ảnh, nhãn "Nổi bật" (sản phẩm featured), danh mục, tên, dòng giá, dòng "Tối thiểu … bộ · May … ngày" (lấy từ meta `moq`, `thoi_gian_san_xuat`) và nút "Xem chi tiết".
+- Đầu trang Cửa hàng / Danh mục là khối navy gọn kèm thanh lọc danh mục dạng nút bo tròn.
+- Trang chi tiết có thêm khối "Đặt tối thiểu / Thời gian may / Giá tham khảo từ".
+
 ## Lưu ý kỹ thuật
 
 CSS riêng của từng trang nằm trong post content (database) và được in **sau** `giaodien.css`. Vì vậy selector trong `giaodien.css` có thêm tiền tố `body` để thắng độ ưu tiên. Không cần sửa database.

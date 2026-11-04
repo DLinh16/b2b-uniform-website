@@ -177,7 +177,7 @@ function tv2_enqueue_giaodien_css() {
         'tv2-giaodien',
         get_stylesheet_directory_uri() . '/giaodien.css',
         array( 'child-style', 'vu-fonts' ),
-        '1.1.0'
+        '1.2.5'
     );
 }
 
@@ -299,76 +299,111 @@ add_action('astra_footer', 'venus_uniform_custom_footer', 5);
 </div>
 */
 
-add_action( 'woocommerce_archive_description', 'venus_product_page_header', 5 );
+/* =====================================================
+ * 7. TRANG CUA HANG / DANH MUC
+ * Dau trang gon + thanh loc danh muc; CSS nam trong giaodien.css (muc 10).
+ * ===================================================== */
 
+// Tieu de H1 nam trong dau trang rieng, an tieu de mac dinh de khong bi lap
+add_filter( 'woocommerce_show_page_title', function ( $show ) {
+    return ( is_shop() || is_product_category() ) ? false : $show;
+} );
+
+// Hien thi du san pham tren mot trang
+add_filter( 'loop_shop_per_page', function () { return 24; }, 30 );
+
+add_action( 'woocommerce_archive_description', 'venus_product_page_header', 5 );
 function venus_product_page_header() {
-    if ( ! is_shop() ) {
+    if ( ! is_shop() && ! is_product_category() ) {
+        return;
+    }
+    $current = is_product_category() ? get_queried_object() : null;
+    $title   = $current ? $current->name : 'Sản phẩm & giải pháp đồng phục';
+    $desc    = $current && $current->description
+        ? $current->description
+        : 'Đồng phục may theo nhận diện thương hiệu cho doanh nghiệp, trường học và tổ chức. Chọn mẫu và gửi yêu cầu để nhận báo giá.';
+    $cats    = get_terms( array(
+        'taxonomy'   => 'product_cat',
+        'hide_empty' => true,
+        'orderby'    => 'term_id',
+        'exclude'    => array( (int) get_option( 'default_product_cat' ) ),
+    ) );
+    $shop_url = get_permalink( wc_get_page_id( 'shop' ) );
+    $total    = (int) wp_count_posts( 'product' )->publish;
+    ?>
+    <div class="venus-product-page">
+        <div class="vp-hero">
+            <div class="vp-label">Venus Uniform · Bộ sưu tập</div>
+            <h1><?php echo esc_html( $title ); ?></h1>
+            <p><?php echo esc_html( wp_strip_all_tags( $desc ) ); ?></p>
+        </div>
+        <?php if ( ! is_wp_error( $cats ) && $cats ) : ?>
+        <nav class="vp-cats" aria-label="<?php echo esc_attr__( 'Danh mục sản phẩm', 'astra-child' ); ?>">
+            <a href="<?php echo esc_url( $shop_url ); ?>"<?php echo $current ? '' : ' class="is-active" aria-current="page"'; ?>>
+                Tất cả <span><?php echo esc_html( $total ); ?></span>
+            </a>
+            <?php foreach ( $cats as $cat ) :
+                $active = $current && (int) $current->term_id === (int) $cat->term_id; ?>
+                <a href="<?php echo esc_url( get_term_link( $cat ) ); ?>"<?php echo $active ? ' class="is-active" aria-current="page"' : ''; ?>>
+                    <?php echo esc_html( $cat->name ); ?> <span><?php echo esc_html( $cat->count ); ?></span>
+                </a>
+            <?php endforeach; ?>
+        </nav>
+        <?php endif; ?>
+    </div>
+    <?php
+}
+
+/* =====================================================
+ * 8. THE SAN PHAM: nhan "Noi bat", dong MOQ, chu nut
+ * ===================================================== */
+add_action( 'woocommerce_before_shop_loop_item_title', 'vu_nhan_noi_bat', 9 );
+function vu_nhan_noi_bat() {
+    global $product;
+    if ( $product && $product->is_featured() ) {
+        echo '<span class="vu-badge">' . esc_html__( 'Nổi bật', 'astra-child' ) . '</span>';
+    }
+}
+
+// Astra dua tieu de ra ngoai khung anh; hook mac dinh cua Woo lai nam trong link anh
+add_action( 'astra_woo_shop_price_after', 'vu_dong_moq', 15 );
+function vu_dong_moq() {
+    global $product;
+    if ( ! $product ) {
+        return;
+    }
+    $moq  = absint( $product->get_meta( 'moq' ) );
+    $ngay = absint( $product->get_meta( 'thoi_gian_san_xuat' ) );
+    if ( ! $moq && ! $ngay ) {
+        return;
+    }
+    $parts = array();
+    if ( $moq )  { $parts[] = sprintf( 'Tối thiểu %d bộ', $moq ); }
+    if ( $ngay ) { $parts[] = sprintf( 'May %d ngày', $ngay ); }
+    echo '<p class="vu-moq">' . esc_html( implode( ' · ', $parts ) ) . '</p>';
+}
+
+add_filter( 'woocommerce_product_add_to_cart_text', function ( $text, $product ) {
+    return $product && ! $product->is_purchasable() ? __( 'Xem chi tiết', 'astra-child' ) : $text;
+}, 10, 2 );
+
+/* =====================================================
+ * 9. TRANG CHI TIET: khoi thong tin dat may
+ * ===================================================== */
+add_action( 'woocommerce_single_product_summary', 'vu_khoi_dat_may', 25 );
+function vu_khoi_dat_may() {
+    global $product;
+    $moq  = absint( $product->get_meta( 'moq' ) );
+    $ngay = absint( $product->get_meta( 'thoi_gian_san_xuat' ) );
+    $gia  = absint( $product->get_meta( 'gia_500_tro_len' ) );
+    if ( ! $moq && ! $ngay && ! $gia ) {
         return;
     }
     ?>
-    <style>
-        .venus-product-page {
-            --navy: #102B46;
-            --gold: #C9A45C;
-            --light: #F3F5F7;
-            color: #333;
-            line-height: 1.7;
-        }
-
-        .venus-product-page * {
-            box-sizing: border-box;
-        }
-
-        .venus-product-page .vp-hero {
-            background: linear-gradient(120deg, #102B46, #1D4668);
-            color: white;
-            padding: 85px 25px;
-            text-align: center;
-            border-radius: 6px;
-            margin-bottom: 40px;
-        }
-
-        .venus-product-page .vp-hero .vp-label {
-            color: #E3C889;
-            font-weight: bold;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-size: 13px;
-            margin-bottom: 10px;
-        }
-
-        .venus-product-page .vp-hero h1 {
-            color: white;
-            font-size: 42px;
-            margin: 0 0 15px;
-        }
-
-        .venus-product-page .vp-hero p {
-            max-width: 750px;
-            margin: auto;
-            font-size: 18px;
-        }
-
-        @media(max-width:768px) {
-            .venus-product-page .vp-hero {
-                padding: 60px 20px;
-            }
-
-            .venus-product-page .vp-hero h1 {
-                font-size: 32px;
-            }
-        }
-    </style>
-
-    <div class="venus-product-page">
-        <div class="vp-hero">
-            <div class="vp-label">VENUS UNIFORM</div>
-            <h1>Sản phẩm &amp; Giải pháp đồng phục</h1>
-            <p>
-                Khám phá bộ sưu tập đồng phục chuyên nghiệp cho doanh nghiệp,
-                trường học và tổ chức, thiết kế theo nhận diện thương hiệu của bạn.
-            </p>
-        </div>
-    </div>
+    <dl class="vu-order-facts">
+        <?php if ( $moq ) : ?><div><dt>Đặt tối thiểu</dt><dd><?php echo esc_html( $moq ); ?> bộ</dd></div><?php endif; ?>
+        <?php if ( $ngay ) : ?><div><dt>Thời gian may</dt><dd><?php echo esc_html( $ngay ); ?> ngày</dd></div><?php endif; ?>
+        <?php if ( $gia ) : ?><div><dt>Giá tham khảo từ</dt><dd><?php echo esc_html( number_format( $gia, 0, ',', '.' ) ); ?>đ</dd></div><?php endif; ?>
+    </dl>
     <?php
 }
