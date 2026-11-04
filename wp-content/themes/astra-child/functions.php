@@ -91,11 +91,17 @@ function nhom5_chan_cart_checkout() {
     if ( function_exists( 'is_cart' ) && ( is_cart() || is_checkout() ) ) {
         wp_safe_redirect( home_url( '/' ) );
         exit;
-        /* =====================================================
+    }
+}
+add_filter( 'woocommerce_get_price_html', 'nhom5_an_gia' );
+function nhom5_an_gia( $price ) {
+    return esc_html__( 'Lien he de nhan bao gia', 'astra-child' );
+}
+
+/* =====================================================
  * 6. TV2 - LOAD RIENG FILE GIAO DIEN
  * ===================================================== */
 add_action( 'wp_enqueue_scripts', 'tv2_enqueue_giaodien_css', 20 );
-
 function tv2_enqueue_giaodien_css() {
     wp_enqueue_style(
         'tv2-giaodien',
@@ -104,9 +110,267 @@ function tv2_enqueue_giaodien_css() {
         '1.0.0'
     );
 }
-    }
+
+/* =====================================================
+   VENUS UNIFORM - FOOTER RIÊNG
+===================================================== */
+
+function venus_uniform_custom_footer() {
+    ?>
+    <footer class="venus-footer">
+        <div class="venus-footer-container">
+
+            <div class="venus-footer-column">
+                <h2>VENUS UNIFORM</h2>
+                <p>
+                    Chuyên thiết kế, sản xuất và cung cấp đồng phục
+                    chuyên nghiệp cho doanh nghiệp, trường học và tổ chức.
+                </p>
+            </div>
+
+            <div class="venus-footer-column">
+                <h3>DANH MỤC SẢN PHẨM</h3>
+                <ul>
+                    <li><a href="/dongphuc/cua-hang/">Tất cả sản phẩm</a></li>
+                    <li><a href="/dongphuc/cua-hang/">Đồng phục công sở</a></li>
+                    <li><a href="/dongphuc/cua-hang/">Đồng phục y tế</a></li>
+                    <li><a href="/dongphuc/cua-hang/">Đồng phục nhà hàng</a></li>
+                </ul>
+            </div>
+
+            <div class="venus-footer-column">
+                <h3>HỖ TRỢ KHÁCH HÀNG</h3>
+                <ul>
+                    <li><a href="/dongphuc/bang-gia/">Bảng giá</a></li>
+                    <li><a href="/dongphuc/dat-lich-tu-van/">Đặt lịch tư vấn</a></li>
+                    <li><a href="/dongphuc/lien-he/">Liên hệ</a></li>
+                </ul>
+            </div>
+
+            <div class="venus-footer-column">
+                <h3>THÔNG TIN LIÊN HỆ</h3>
+                <p>Địa chỉ: Số 10 Phố Vọng, Hai Bà Trưng, Hà Nội</p>
+                <p>Hotline: 0988 686 868</p>
+                <p>Thời gian: Thứ 2 – Thứ 7, 8:00 – 17:30</p>
+            </div>
+
+        </div>
+
+        <div class="venus-footer-bottom">
+            © <?php echo esc_html(date('Y')); ?> VENUS UNIFORM.
+            All rights reserved.
+        </div>
+    </footer>
+    <?php
 }
-add_filter( 'woocommerce_get_price_html', 'nhom5_an_gia' );
-function nhom5_an_gia( $price ) {
-    return esc_html__( 'Lien he de nhan bao gia', 'astra-child' );
+
+add_action('astra_footer', 'venus_uniform_custom_footer', 5);
+
+
+/* CSS cho footer VENUS UNIFORM */
+function venus_uniform_footer_styles() {
+    ?>
+    <style>
+        .venus-footer {
+            background: #29231b;
+            color: #eee8dc;
+            padding: 55px 25px 0;
+            margin-top: 50px;
+        }
+
+        .venus-footer-container {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1.3fr 1fr 1fr 1.2fr;
+            gap: 35px;
+        }
+
+        .venus-footer-column h2 {
+            color: #d5ad66;
+            font-size: 25px;
+            margin-bottom: 18px;
+        }
+
+        .venus-footer-column h3 {
+            color: #d5ad66;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .venus-footer-column p,
+        .venus-footer-column li {
+            color: #eee8dc;
+            font-size: 14px;
+            line-height: 1.9;
+        }
+
+        .venus-footer-column ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .venus-footer-column a {
+            color: #eee8dc;
+            text-decoration: none;
+        }
+
+        .venus-footer-column a:hover {
+            color: #d5ad66;
+        }
+
+        .venus-footer-bottom {
+            max-width: 1200px;
+            margin: 35px auto 0;
+            padding: 20px 0;
+            border-top: 1px solid #514638;
+            text-align: center;
+            color: #c9c0b2;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .venus-footer-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .venus-footer-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <?php
+}
+
+add_action('wp_head', 'venus_uniform_footer_styles');
+
+//[products limit="12" columns="3" orderby="date" order="DESC"]
+/*
+<style>
+.venus-product-page {
+    --navy: #102B46;
+    --gold: #C9A45C;
+    --light: #F3F5F7;
+    color: #333;
+    font-family: Arial, sans-serif;
+    line-height: 1.7;
+}
+.venus-product-page * { box-sizing: border-box; }
+.venus-product-page .vp-hero {
+    background: linear-gradient(120deg, #102B46, #1D4668);
+    color: white;
+    padding: 85px 25px;
+    text-align: center;
+    border-radius: 6px;
+    margin-bottom: 40px;
+}
+.venus-product-page .vp-hero .vp-label {
+    color: #E3C889;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+.venus-product-page .vp-hero h1 {
+    color: white;
+    font-size: 42px;
+    margin: 0 0 15px;
+}
+.venus-product-page .vp-hero p {
+    max-width: 750px;
+    margin: auto;
+    font-size: 18px;
+}
+@media(max-width:768px) {
+    .venus-product-page .vp-hero { padding: 60px 20px; }
+    .venus-product-page .vp-hero h1 { font-size: 32px; }
+}
+</style>
+<div class="venus-product-page">
+<div class="vp-hero">
+<div class="vp-label">VENUS UNIFORM</div>
+<h1>Sản phẩm &amp; Giải pháp đồng phục</h1>
+<p>Khám phá bộ sưu tập đồng phục chuyên nghiệp cho doanh nghiệp, trường học và tổ chức, thiết kế theo nhận diện thương hiệu của bạn.</p>
+</div>
+</div>
+*/
+
+add_action( 'woocommerce_archive_description', 'venus_product_page_header', 5 );
+
+function venus_product_page_header() {
+    if ( ! is_shop() ) {
+        return;
+    }
+    ?>
+    <style>
+        .venus-product-page {
+            --navy: #102B46;
+            --gold: #C9A45C;
+            --light: #F3F5F7;
+            color: #333;
+            font-family: Arial, sans-serif;
+            line-height: 1.7;
+        }
+
+        .venus-product-page * {
+            box-sizing: border-box;
+        }
+
+        .venus-product-page .vp-hero {
+            background: linear-gradient(120deg, #102B46, #1D4668);
+            color: white;
+            padding: 85px 25px;
+            text-align: center;
+            border-radius: 6px;
+            margin-bottom: 40px;
+        }
+
+        .venus-product-page .vp-hero .vp-label {
+            color: #E3C889;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .venus-product-page .vp-hero h1 {
+            color: white;
+            font-size: 42px;
+            margin: 0 0 15px;
+        }
+
+        .venus-product-page .vp-hero p {
+            max-width: 750px;
+            margin: auto;
+            font-size: 18px;
+        }
+
+        @media(max-width:768px) {
+            .venus-product-page .vp-hero {
+                padding: 60px 20px;
+            }
+
+            .venus-product-page .vp-hero h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+
+    <div class="venus-product-page">
+        <div class="vp-hero">
+            <div class="vp-label">VENUS UNIFORM</div>
+            <h1>Sản phẩm &amp; Giải pháp đồng phục</h1>
+            <p>
+                Khám phá bộ sưu tập đồng phục chuyên nghiệp cho doanh nghiệp,
+                trường học và tổ chức, thiết kế theo nhận diện thương hiệu của bạn.
+            </p>
+        </div>
+    </div>
+    <?php
 }
