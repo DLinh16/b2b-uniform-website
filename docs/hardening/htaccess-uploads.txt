@@ -1,0 +1,5 @@
+# Nhom5 Hardening: khong cho chay PHP trong thu muc uploads
+<FilesMatch "\.(php|phtml|php\d)$">
+    Require all denied
+</FilesMatch>
+Options -Indexes

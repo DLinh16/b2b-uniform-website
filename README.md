@@ -49,4 +49,15 @@ C:\xampp\htdocs\dongphuc\wp-content\uploads\vu-sanpham\
 
 Nếu không chép, ảnh sản phẩm ở trang Cửa hàng sẽ không hiển thị. Cách tạo lại ảnh và sản phẩm từ đầu xem trong `tools/` và `wp-content/themes/astra-child/DESIGN.md`.
 
+### Bước 4: Bảo mật (Phần 3)
+Thư mục `wp-content/plugins/` và file `.htaccess` không nằm trong repo, nên cần làm tay trên máy mới:
+
+1. Cài và kích hoạt 2 plugin từ wordpress.org: **Wordfence Security** và **WPS Hide Login**.
+2. Trang đăng nhập đổi thành `http://localhost/dongphuc/venus-quantri/` (cấu hình WPS Hide Login đã có trong database). `/wp-login.php` sẽ trả 404.
+3. Wordfence › Login Security: sai 5 lần trong 30 phút thì khóa 10 phút, ẩn chi tiết lỗi đăng nhập, bắt buộc mật khẩu mạnh, chặn dò tên người dùng (`?author=N`, REST API).
+4. Chép nội dung `docs/hardening/htaccess-goc.txt` lên **đầu** file `.htaccess` ở thư mục gốc site (trên khối `# BEGIN WordPress`), và chép `docs/hardening/htaccess-uploads.txt` thành `wp-content/uploads/.htaccess`.
+5. Trong `wp-config.php`: `WP_DEBUG` để `false`, thêm `define( 'DISALLOW_FILE_EDIT', true );`, rồi đặt file chỉ-đọc.
+
+File SQL không gồm các bảng `dp5_wf*` của Wordfence (chứa khóa bí mật và log IP). Wordfence tự tạo lại các bảng này khi kích hoạt. Chi tiết và kết quả kiểm tra trước/sau xem trong báo cáo nhóm, Phần 3.
+
 **Kết quả:** Sau khi import xong, toàn bộ giao diện các trang cốt lõi, bố cục 5 danh mục B2B và hệ thống footer của Thành viên 2 sẽ hiển thị hoàn chỉnh trên website của bạn[cite: 1, 8].
