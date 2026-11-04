@@ -45,17 +45,80 @@ add_action( 'wp_footer', 'nhom5_back_to_top' );
 function nhom5_back_to_top() {
     ?>
     <button id="nhom5-btt" type="button"
-        aria-label="<?php echo esc_attr__( 'Len dau trang', 'astra-child' ); ?>">&#8593;</button>
+        aria-label="<?php echo esc_attr__( 'Lên đầu trang', 'astra-child' ); ?>">&#8593;</button>
     <script>
     (function () {
         var btn = document.getElementById('nhom5-btt');
-        if (!btn) return;
+        var body = document.body;
+        var ticking = false;
+        function onScroll() {
+            var y = window.scrollY;
+            if (btn) btn.classList.toggle('show', y > 300);
+            body.classList.toggle('vu-scrolled', y > 8);
+            ticking = false;
+        }
         window.addEventListener('scroll', function () {
-            btn.classList.toggle('show', window.scrollY > 300);
+            if (!ticking) { ticking = true; window.requestAnimationFrame(onScroll); }
+        }, { passive: true });
+        onScroll();
+        if (btn) {
+            btn.addEventListener('click', function () {
+                var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+            });
+        }
+    })();
+    </script>
+    <?php
+}
+
+/* =====================================================
+ * 3b. HIEN DAN KHI CUON (nhe, chay mot lan)
+ * Chi gan class khi trinh duyet ho tro IntersectionObserver
+ * va nguoi dung khong bat "giam chuyen dong".
+ * ===================================================== */
+add_action( 'wp_footer', 'vu_scroll_reveal', 30 );
+function vu_scroll_reveal() {
+    ?>
+    <script>
+    (function () {
+        if (!('IntersectionObserver' in window)) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        // Nhom phan tu: cac phan tu cung nhom hien lech nhau mot chut (toi da 3 buoc)
+        var groups = [
+            '.vh-title', '.vh-about > *', '.vh-category', '.vh-step',
+            '.vh-cta .vh-container', '.vh-contact > div',
+            '.va-intro > *', '.va-grid > .va-card', '.va-cta',
+            '.venus-price-page > h2', '.venus-price-table', '.venus-price-note',
+            '.venus-price-cta', 'ul.products > li.product', '.tv3-form'
+        ];
+        var seen = [];
+        document.documentElement.classList.add('vu-js');
+
+        groups.forEach(function (sel) {
+            var parentIndex = new Map();
+            document.querySelectorAll(sel).forEach(function (el) {
+                if (seen.indexOf(el) !== -1) return;
+                seen.push(el);
+                var p = el.parentNode;
+                var i = parentIndex.get(p) || 0;
+                parentIndex.set(p, i + 1);
+                el.style.setProperty('--vu-delay', (Math.min(i % 4, 3) * 80) + 'ms');
+                el.classList.add('vu-reveal');
+            });
         });
-        btn.addEventListener('click', function () {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) {
+                    e.target.classList.add('is-in');
+                    io.unobserve(e.target);
+                }
+            });
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+
+        seen.forEach(function (el) { io.observe(el); });
     })();
     </script>
     <?php
@@ -81,7 +144,7 @@ add_action( 'woocommerce_single_product_summary', 'nhom5_nut_bao_gia', 30 );
 function nhom5_nut_bao_gia() {
     $url = esc_url( home_url( '/lien-he/' ) );
     echo '<a class="button nhom5-btn-baogia" href="' . $url . '">'
-       . esc_html__( 'Yeu cau bao gia', 'astra-child' )
+       . esc_html__( 'Yêu cầu báo giá', 'astra-child' )
        . '</a>';
 }
 
@@ -95,7 +158,7 @@ function nhom5_chan_cart_checkout() {
 }
 add_filter( 'woocommerce_get_price_html', 'nhom5_an_gia' );
 function nhom5_an_gia( $price ) {
-    return esc_html__( 'Lien he de nhan bao gia', 'astra-child' );
+    return esc_html__( 'Liên hệ để nhận báo giá', 'astra-child' );
 }
 
 /* =====================================================
@@ -103,12 +166,27 @@ function nhom5_an_gia( $price ) {
  * ===================================================== */
 add_action( 'wp_enqueue_scripts', 'tv2_enqueue_giaodien_css', 20 );
 function tv2_enqueue_giaodien_css() {
+    // Font co ho tro tieng Viet day du: Lora (tieu de), Be Vietnam Pro (noi dung)
+    wp_enqueue_style(
+        'vu-fonts',
+        'https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Lora:wght@500;600&display=swap&subset=vietnamese',
+        array(),
+        null
+    );
     wp_enqueue_style(
         'tv2-giaodien',
         get_stylesheet_directory_uri() . '/giaodien.css',
-        array( 'child-style' ),
-        '1.0.0'
+        array( 'child-style', 'vu-fonts' ),
+        '1.1.0'
     );
+}
+
+add_filter( 'wp_resource_hints', 'vu_font_preconnect', 10, 2 );
+function vu_font_preconnect( $urls, $relation_type ) {
+    if ( 'preconnect' === $relation_type ) {
+        $urls[] = array( 'href' => 'https://fonts.gstatic.com', 'crossorigin' );
+    }
+    return $urls;
 }
 
 /* =====================================================
@@ -167,86 +245,7 @@ function venus_uniform_custom_footer() {
 add_action('astra_footer', 'venus_uniform_custom_footer', 5);
 
 
-/* CSS cho footer VENUS UNIFORM */
-function venus_uniform_footer_styles() {
-    ?>
-    <style>
-        .venus-footer {
-            background: #29231b;
-            color: #eee8dc;
-            padding: 55px 25px 0;
-            margin-top: 50px;
-        }
-
-        .venus-footer-container {
-            max-width: 1200px;
-            margin: auto;
-            display: grid;
-            grid-template-columns: 1.3fr 1fr 1fr 1.2fr;
-            gap: 35px;
-        }
-
-        .venus-footer-column h2 {
-            color: #d5ad66;
-            font-size: 25px;
-            margin-bottom: 18px;
-        }
-
-        .venus-footer-column h3 {
-            color: #d5ad66;
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-
-        .venus-footer-column p,
-        .venus-footer-column li {
-            color: #eee8dc;
-            font-size: 14px;
-            line-height: 1.9;
-        }
-
-        .venus-footer-column ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .venus-footer-column a {
-            color: #eee8dc;
-            text-decoration: none;
-        }
-
-        .venus-footer-column a:hover {
-            color: #d5ad66;
-        }
-
-        .venus-footer-bottom {
-            max-width: 1200px;
-            margin: 35px auto 0;
-            padding: 20px 0;
-            border-top: 1px solid #514638;
-            text-align: center;
-            color: #c9c0b2;
-            font-size: 13px;
-        }
-
-        @media (max-width: 768px) {
-            .venus-footer-container {
-                grid-template-columns: 1fr 1fr;
-                gap: 25px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .venus-footer-container {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-    <?php
-}
-
-add_action('wp_head', 'venus_uniform_footer_styles');
+/* CSS cho footer VENUS UNIFORM: da chuyen sang giaodien.css (muc 12) */
 
 //[products limit="12" columns="3" orderby="date" order="DESC"]
 /*
@@ -313,7 +312,6 @@ function venus_product_page_header() {
             --gold: #C9A45C;
             --light: #F3F5F7;
             color: #333;
-            font-family: Arial, sans-serif;
             line-height: 1.7;
         }
 

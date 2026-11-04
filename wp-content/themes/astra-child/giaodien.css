@@ -1,40 +1,748 @@
 /*
-Theme Name: TV2 Thanh Custom CSS
-*/
+ * VENUS UNIFORM - lop giao dien chung (TV2)
+ * Huong thiet ke: vai suiting navy, khuy dong (brass), duong chi may.
+ * Xem DESIGN.md cung thu muc de biet token va quy tac.
+ *
+ * Ghi chu ky thuat: noi dung trang (Trang chu, Gioi thieu, Bang gia...)
+ * co <style> rieng nam trong post content, in SAU file nay. Vi vay cac
+ * selector duoi day them tien to "body" de thang ve do uu tien
+ * ma khong can sua database.
+ */
 
-/* ===== Banner trang chu ===== */
-.tv2-banner {
-    width: 100%;
-    padding: 60px 24px;
-    background-color: #f5f5f5;
-    text-align: center;
+/* =========================================================
+   1. TOKENS
+   ========================================================= */
+:root {
+    --vu-navy: #102B46;        /* mau chu dao: vai suiting */
+    --vu-navy-deep: #0B1F33;   /* footer, khoi CTA */
+    --vu-brass: #C9A45C;       /* khuy dong: nut, duong chi */
+    --vu-brass-dark: #A9823F;  /* hover cua brass */
+    --vu-brass-soft: #E3C889;  /* chu nho tren nen toi */
+    --vu-shirting: #F3F5F7;    /* nen phu: vai so mi */
+    --vu-ink: #24303D;         /* chu than bai */
+    --vu-muted: #5B6672;       /* chu phu (dat AA tren nen trang) */
+    --vu-line: #E1E5EA;
+
+    --vu-font-body: "Be Vietnam Pro", "Segoe UI", Arial, sans-serif;
+    --vu-font-display: "Lora", Georgia, "Times New Roman", serif;
+
+    --vu-radius: 4px;
+    --vu-ease: cubic-bezier(.2, .7, .3, 1);
+    --vu-fast: 200ms;
+
+    /* duong chi may: net dut vang */
+    --vu-stitch: repeating-linear-gradient(90deg, var(--vu-brass) 0 7px, transparent 7px 12px);
+
+    /* Ghi de mau chinh cua Astra (mac dinh la xanh #046bd2) */
+    --ast-global-color-0: #102B46;
+    --ast-global-color-1: #0B1F33;
 }
 
-/* ===== Tieu de ===== */
-.tv2-title {
-    font-size: 36px;
-    font-weight: 700;
-    margin-bottom: 20px;
+/* =========================================================
+   2. NEN TANG: chu, link, focus
+   ========================================================= */
+body,
+body .venus-home,
+body .venus-about,
+body .venus-product-page,
+body .venus-price-page,
+body .tv3-form {
+    font-family: var(--vu-font-body);
+    color: var(--vu-ink);
 }
 
-/* ===== Nut lien he ===== */
-.tv2-btn {
+body .venus-home h1, body .venus-home h2, body .venus-home h3,
+body .venus-about h1, body .venus-about h2, body .venus-about h3,
+body .venus-product-page h1,
+body .venus-price-page h1, body .venus-price-page h2,
+body .entry-title, body .page-title,
+body .woocommerce-loop-product__title,
+body .product_title {
+    font-family: var(--vu-font-display);
+    letter-spacing: .005em;
+}
+
+body a { transition: color var(--vu-fast) var(--vu-ease); }
+
+body :focus-visible {
+    outline: 2px solid var(--vu-brass);
+    outline-offset: 3px;
+}
+
+/* =========================================================
+   3. HEADER
+   ========================================================= */
+body .site-header .ast-primary-header-bar {
+    transition: box-shadow 260ms var(--vu-ease);
+}
+body.vu-scrolled .site-header .ast-primary-header-bar {
+    box-shadow: 0 1px 0 var(--vu-line), 0 6px 18px rgba(16, 43, 70, .06);
+}
+
+body .site-title a {
+    font-family: var(--vu-font-display);
+    font-weight: 600;
+    letter-spacing: .06em;
+    color: var(--vu-navy);
+}
+
+body .main-header-menu > .menu-item > .menu-link {
+    position: relative;
+    color: var(--vu-ink);
+    font-size: 14px;
+}
+/* gach chan dang duong chi, chay tu trai sang khi hover / trang hien tai */
+body .main-header-menu > .menu-item > .menu-link::after {
+    content: "";
+    position: absolute;
+    left: 1em; right: 1em; bottom: 14px;
+    height: 2px;
+    background: var(--vu-stitch);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 260ms var(--vu-ease);
+}
+body .main-header-menu > .menu-item > .menu-link:hover::after,
+body .main-header-menu > .current-menu-item > .menu-link::after {
+    transform: scaleX(1);
+}
+body .main-header-menu > .current-menu-item > .menu-link,
+body .main-header-menu > .menu-item > .menu-link:hover {
+    color: var(--vu-navy);
+}
+
+/* =========================================================
+   4. NUT (dung chung)
+   Chu navy tren nen dong: chu trang tren #C9A45C chi dat 2.3:1.
+   ========================================================= */
+body .venus-home .vh-btn,
+body .venus-about .va-button,
+body .venus-price-cta a,
+body .nhom5-btn-baogia,
+body .tv3-btn {
     display: inline-block;
-    padding: 12px 24px;
-    background: #1e73be;
-    color: #fff;
+    background: var(--vu-brass);
+    color: var(--vu-navy) !important;
+    border: 1px solid var(--vu-brass);
+    border-radius: var(--vu-radius);
+    padding: 13px 26px;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: .04em;
     text-decoration: none;
-    border-radius: 6px;
-    transition: 0.3s;
+    transition: background-color var(--vu-fast) var(--vu-ease),
+                border-color var(--vu-fast) var(--vu-ease),
+                transform var(--vu-fast) var(--vu-ease);
+}
+body .venus-home .vh-btn:hover,
+body .venus-about .va-button:hover,
+body .venus-price-cta a:hover,
+body .nhom5-btn-baogia:hover,
+body .tv3-btn:hover {
+    background: var(--vu-brass-soft);
+    border-color: var(--vu-brass-soft);
+    color: var(--vu-navy) !important;
+    transform: translateY(-1px);
+}
+body .venus-home .vh-btn:active,
+body .tv3-btn:active { transform: translateY(0); }
+
+/* Nut thu hai trong cung nhom: dang vien, de phan cap ro hon */
+body .venus-home .vh-btn + .vh-btn {
+    background: transparent;
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, .45);
+}
+body .venus-home .vh-btn + .vh-btn:hover {
+    background: rgba(255, 255, 255, .08);
+    border-color: var(--vu-brass-soft);
+    color: #fff !important;
 }
 
-.tv2-btn:hover {
-    background: #155a94;
+/* =========================================================
+   5. HERO (Trang chu, Gioi thieu, San pham)
+   Vai twill: soc cheo rat mo + duong chi vien ben trong.
+   ========================================================= */
+body .venus-home .vh-hero,
+body .venus-about .va-hero,
+body .venus-product-page .vp-hero {
+    position: relative;
+    isolation: isolate;
+    background-color: var(--vu-navy);
+    background-image:
+        repeating-linear-gradient(135deg, rgba(255, 255, 255, .025) 0 2px, transparent 2px 6px),
+        linear-gradient(110deg, var(--vu-navy-deep) 0%, var(--vu-navy) 55%, #1A3C5E 100%);
+    overflow: hidden;
+}
+body .venus-home .vh-hero::before,
+body .venus-about .va-hero::before,
+body .venus-product-page .vp-hero::before {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    border: 1px dashed rgba(201, 164, 92, .45);
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: -1;
+}
+body .venus-home .vh-hero { padding: 110px 7% 100px; }
+body .venus-home .vh-hero h1 {
+    font-weight: 600;
+    line-height: 1.15;
+    max-width: 820px;
+}
+/* dong nhan nho phia tren tieu de */
+body .venus-home .vh-hero .vh-container > p:first-child {
+    color: var(--vu-brass-soft);
+    font-size: 13px;
+    letter-spacing: .14em;
+    margin-bottom: 18px;
+}
+body .venus-home .vh-hero .vh-container > p:first-child + h1 + p {
+    color: rgba(243, 245, 247, .85);
+    margin-bottom: 18px;
+}
+body .venus-about .va-hero h1,
+body .venus-product-page .vp-hero h1 { font-weight: 600; }
+
+/* Hero hien ra khi tai trang: mot lan, nhe */
+body .venus-home .vh-hero .vh-container > *,
+body .venus-about .va-hero > *,
+body .venus-product-page .vp-hero > * {
+    animation: vu-rise 700ms var(--vu-ease) both;
+}
+body .venus-home .vh-hero .vh-container > :nth-child(2),
+body .venus-about .va-hero > :nth-child(2),
+body .venus-product-page .vp-hero > :nth-child(2) { animation-delay: 80ms; }
+body .venus-home .vh-hero .vh-container > :nth-child(3),
+body .venus-about .va-hero > :nth-child(3),
+body .venus-product-page .vp-hero > :nth-child(3) { animation-delay: 160ms; }
+body .venus-home .vh-hero .vh-container > :nth-child(n+4) { animation-delay: 240ms; }
+
+@keyframes vu-rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* =========================================================
+   6. TIEU DE SECTION: duong chi ngan ben duoi
+   ========================================================= */
+body .venus-home .vh-title h2,
+body .venus-price-page > h2 {
+    position: relative;
+    padding-bottom: 16px;
+    font-weight: 600;
+}
+body .venus-home .vh-title h2::after,
+body .venus-price-page > h2::after {
+    content: "";
+    position: absolute;
+    left: 50%; bottom: 0;
+    width: 64px; height: 2px;
+    margin-left: -32px;
+    background: var(--vu-stitch);
+}
+body .venus-home .vh-title p { color: var(--vu-muted); }
+
+/* =========================================================
+   7. TRANG CHU - cac khoi
+   ========================================================= */
+body .venus-home .vh-section { padding: 80px 0; }
+
+body .venus-home .vh-about-panel {
+    border-left: 0;
+    border-radius: var(--vu-radius);
+    padding: 40px;
+    background: var(--vu-shirting);
+    position: relative;
+}
+body .venus-home .vh-about-panel::before {
+    content: "";
+    position: absolute;
+    top: 24px; bottom: 24px; left: 0;
+    width: 2px;
+    background: repeating-linear-gradient(180deg, var(--vu-brass) 0 7px, transparent 7px 12px);
+}
+body .venus-home .vh-about-panel h2 { font-weight: 600; line-height: 1.3; }
+
+/* Danh muc: anh zoom nhe khi hover, duong chi chay o chan the */
+body .venus-home .vh-category {
+    position: relative;
+    background: #fff;
+    border: 1px solid var(--vu-line);
+    border-bottom: 1px solid var(--vu-line);
+    border-radius: var(--vu-radius);
+    padding: 0 0 22px;
+    transition: border-color var(--vu-fast) var(--vu-ease),
+                box-shadow 260ms var(--vu-ease);
+}
+body .venus-home .vh-category::after {
+    content: "";
+    position: absolute;
+    left: 20px; right: 20px; bottom: 10px;
+    height: 2px;
+    background: var(--vu-stitch);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 320ms var(--vu-ease);
+}
+body .venus-home .vh-category:hover {
+    border-color: #D3D9E0;
+    box-shadow: 0 10px 24px rgba(16, 43, 70, .08);
+}
+body .venus-home .vh-category:hover::after { transform: scaleX(1); }
+
+body .venus-home .vh-category img,
+body .venus-home .vh-category > div[style*="background-image"] {
+    height: 240px !important;
+    border-radius: 0 !important;
+    margin: 0 0 18px !important;
+    transition: transform 500ms var(--vu-ease) !important;
+}
+/* khung cat anh de zoom khong tran ra ngoai */
+body .venus-home .vh-category { overflow: hidden; }
+body .venus-home .vh-category:hover img,
+body .venus-home .vh-category:hover > div[style*="background-image"] {
+    transform: scale(1.04);
+}
+body .venus-home .vh-category h3 { font-size: 19px; font-weight: 600; padding: 0 16px; }
+body .venus-home .vh-category p { color: var(--vu-muted); padding: 0 16px; }
+
+/* Quy trinh: so buoc noi voi nhau bang duong chi */
+body .venus-home .vh-process { background: var(--vu-shirting); }
+body .venus-home .vh-steps { position: relative; }
+body .venus-home .vh-step {
+    position: relative;
+    background: #fff;
+    border: 1px solid var(--vu-line);
+    border-radius: var(--vu-radius);
+    padding: 28px 22px;
+    transition: border-color var(--vu-fast) var(--vu-ease);
+}
+body .venus-home .vh-step:hover { border-color: var(--vu-brass); }
+body .venus-home .vh-step strong {
+    font-family: var(--vu-font-display);
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--vu-brass-dark);
+    margin-bottom: 10px;
+}
+body .venus-home .vh-step h3 { font-size: 18px; font-weight: 600; margin: 6px 0 8px; }
+body .venus-home .vh-step p { color: var(--vu-muted); margin: 0; font-size: 15px; }
+@media (min-width: 701px) {
+    body .venus-home .vh-step:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        top: 44px; right: -19px;
+        width: 20px; height: 2px;
+        background: var(--vu-stitch);
+    }
+}
+
+/* CTA */
+body .venus-home .vh-cta,
+body .venus-about .va-commit,
+body .venus-price-cta {
+    background-color: var(--vu-navy-deep);
+    background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, .025) 0 2px, transparent 2px 6px);
+}
+body .venus-home .vh-cta { padding: 80px 20px; }
+body .venus-home .vh-cta h2 { font-weight: 600; line-height: 1.3; }
+
+/* Thong tin lien he */
+body .venus-home .vh-contact > div {
+    background: #fff;
+    border: 1px solid var(--vu-line);
+    border-top: 2px solid var(--vu-navy);
+    border-bottom: 1px solid var(--vu-line);
+    border-radius: var(--vu-radius);
+    padding: 28px 22px;
+}
+body .venus-home .vh-contact h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+body .venus-home .vh-contact p { margin: 0; color: var(--vu-muted); }
+
+/* =========================================================
+   8. GIOI THIEU
+   ========================================================= */
+body .venus-about .va-label { color: var(--vu-brass-dark); letter-spacing: .12em; }
+body .venus-about h2 { font-weight: 600; }
+body .venus-about .va-intro-img {
+    position: relative;
+    background-color: var(--vu-navy);
+    background-image:
+        repeating-linear-gradient(135deg, rgba(255, 255, 255, .03) 0 2px, transparent 2px 6px),
+        linear-gradient(145deg, var(--vu-navy-deep), #2E4F6E);
+    border-radius: var(--vu-radius);
+}
+body .venus-about .va-intro-img::before {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    border: 1px dashed rgba(201, 164, 92, .5);
+}
+body .venus-about .va-intro-img strong {
+    font-family: var(--vu-font-display);
+    font-weight: 600;
+    color: var(--vu-brass-soft);
+}
+body .venus-about .va-card {
+    border: 1px solid var(--vu-line);
+    border-bottom: 1px solid var(--vu-line);
+    border-radius: var(--vu-radius);
+    box-shadow: none;
+    transition: border-color var(--vu-fast) var(--vu-ease),
+                box-shadow 260ms var(--vu-ease);
+}
+body .venus-about .va-card:hover {
+    border-color: #D3D9E0;
+    box-shadow: 0 10px 24px rgba(16, 43, 70, .07);
+}
+body .venus-about .va-number {
+    font-family: var(--vu-font-display);
+    font-size: 15px;
+    color: var(--vu-brass-dark);
+    letter-spacing: .1em;
+}
+body .venus-about .va-commit .va-card {
+    border-color: rgba(255, 255, 255, .12);
+    background: rgba(255, 255, 255, .05);
+}
+body .venus-about .va-commit .va-card:hover {
+    border-color: rgba(201, 164, 92, .5);
+    box-shadow: none;
+}
+body .venus-about .va-cta { background: var(--vu-shirting); }
+
+/* =========================================================
+   9. BANG GIA - dua ve cung bo mau navy/dong voi cac trang khac
+   ========================================================= */
+body .venus-price-page { color: var(--vu-ink); }
+body .venus-price-hero {
+    background: var(--vu-shirting);
+    border-radius: var(--vu-radius);
+    position: relative;
+}
+body .venus-price-hero::before {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border: 1px dashed rgba(169, 130, 63, .45);
+    pointer-events: none;
+}
+body .venus-price-hero h1,
+body .venus-price-page > h2 { color: var(--vu-navy); font-weight: 600; }
+
+body .venus-price-table {
+    border: 1px solid var(--vu-line);
+    border-radius: var(--vu-radius);
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+}
+body .venus-price-table th {
+    background: var(--vu-navy);
+    font-weight: 600;
+    letter-spacing: .03em;
+    border: 0;
+}
+body .venus-price-table td {
+    border: 0;
+    border-top: 1px solid var(--vu-line);
+}
+body .venus-price-table tr:nth-child(even) { background: #F8F9FA; }
+body .venus-price-table tbody tr { transition: background-color var(--vu-fast) var(--vu-ease); }
+body .venus-price-table tbody tr:hover { background: #EEF1F4; }
+body .venus-price-table td:first-child { font-weight: 600; color: var(--vu-navy); text-align: left; padding-left: 24px; }
+body .venus-price-table td:last-child { color: var(--vu-brass-dark); font-weight: 600; }
+
+body .venus-price-note {
+    background: var(--vu-shirting);
+    border-left: 0;
+    border: 1px solid var(--vu-line);
+    border-radius: var(--vu-radius);
+}
+body .venus-price-note strong { color: var(--vu-navy); }
+
+body .venus-price-page > ol {
+    counter-reset: vu-step;
+    list-style: none;
+    padding: 0;
+    max-width: 760px;
+    margin: 0 auto;
+}
+body .venus-price-page > ol > li {
+    counter-increment: vu-step;
+    position: relative;
+    padding: 14px 0 14px 56px;
+    border-bottom: 1px dashed var(--vu-line);
+}
+body .venus-price-page > ol > li::before {
+    content: counter(vu-step);
+    position: absolute;
+    left: 0; top: 10px;
+    width: 34px; height: 34px;
+    border: 1px solid var(--vu-brass);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: var(--vu-font-display);
+    font-weight: 600;
+    color: var(--vu-brass-dark);
+}
+body .venus-price-cta { border-radius: var(--vu-radius); }
+body .venus-price-cta h2 { color: var(--vu-brass-soft); }
+
+/* =========================================================
+   10. CUA HANG / SAN PHAM (WooCommerce)
+   ========================================================= */
+body .woocommerce ul.products li.product {
+    background: #fff;
+    border: 1px solid var(--vu-line);
+    border-radius: var(--vu-radius);
+    overflow: hidden;
+    transition: border-color var(--vu-fast) var(--vu-ease),
+                box-shadow 260ms var(--vu-ease);
+}
+body .woocommerce ul.products li.product:hover {
+    border-color: #D3D9E0;
+    box-shadow: 0 10px 24px rgba(16, 43, 70, .08);
+}
+/* Anh dong deu ti le 4:5 de luoi khong bi lech */
+body .woocommerce ul.products li.product .astra-shop-thumbnail-wrap {
+    overflow: hidden;
+    background: var(--vu-shirting);
+}
+body .woocommerce ul.products li.product .astra-shop-thumbnail-wrap img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    height: auto;
+    object-fit: cover;
+    margin: 0 !important;
+    transition: transform 500ms var(--vu-ease);
+}
+body .woocommerce ul.products li.product:hover .astra-shop-thumbnail-wrap img {
+    transform: scale(1.04);
+}
+body .woocommerce ul.products li.product .astra-shop-summary-wrap {
+    padding: 16px 18px 20px;
+}
+body .woocommerce ul.products li.product .ast-woo-product-category {
+    color: var(--vu-muted);
+    font-size: 12px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+body .woocommerce ul.products li.product .woocommerce-loop-product__title {
+    color: var(--vu-navy);
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+body .woocommerce ul.products li.product .price {
+    color: var(--vu-brass-dark);
+    font-size: 13px;
+    font-weight: 600;
+}
+body .woocommerce ul.products li.product .button {
+    background: transparent;
+    color: var(--vu-navy);
+    border: 1px solid var(--vu-navy);
+    border-radius: var(--vu-radius);
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background-color var(--vu-fast) var(--vu-ease),
+                color var(--vu-fast) var(--vu-ease);
+}
+body .woocommerce ul.products li.product .button:hover {
+    background: var(--vu-navy);
     color: #fff;
 }
+/* Icon tui mua hang cua Astra khong hop voi che do chi trung bay */
+body .woocommerce ul.products li.product .ast-on-card-button { display: none; }
 
-/* ===== Anh banner ===== */
-.tv2-banner img {
-    max-width: 100%;
-    height: auto;
+body .venus-products-section { padding: 80px 0; }
+body .venus-products-section > .woocommerce {
+    width: 92%;
+    max-width: 1180px;
+    margin: 0 auto;
 }
+
+body .woocommerce-ordering select {
+    border: 1px solid var(--vu-line);
+    border-radius: var(--vu-radius);
+}
+body .woocommerce-breadcrumb { color: var(--vu-muted); }
+
+/* Trang chi tiet san pham */
+body .nhom5-btn-baogia { margin-top: 8px; }
+
+/* =========================================================
+   11. FORM LIEN HE (TV3) + TAI KHOAN
+   ========================================================= */
+body .tv3-form {
+    --c: var(--vu-navy);
+    background: #fff;
+    border: 1px solid var(--vu-line);
+    border-top: 2px solid var(--vu-navy);
+    border-radius: var(--vu-radius);
+    padding: 36px 40px;
+}
+body .tv3-row span { font-size: 14px; color: var(--vu-navy); }
+body .tv3-form input:not([type=radio]):not([type=file]),
+body .tv3-form select,
+body .tv3-form textarea,
+body.woocommerce-account .woocommerce form .input-text {
+    border: 1px solid #C9D0D8;
+    border-radius: var(--vu-radius);
+    padding: 11px 12px;
+    background: #fff;
+    transition: border-color var(--vu-fast) var(--vu-ease),
+                box-shadow var(--vu-fast) var(--vu-ease);
+}
+body .tv3-form input:not([type=radio]):not([type=file]):focus,
+body .tv3-form select:focus,
+body .tv3-form textarea:focus,
+body.woocommerce-account .woocommerce form .input-text:focus {
+    outline: none;
+    border-color: var(--vu-brass);
+    box-shadow: 0 0 0 3px rgba(201, 164, 92, .22);
+}
+body .tv3-btn { margin-top: 6px; cursor: pointer; }
+
+body.woocommerce-account .woocommerce form.login {
+    border: 1px solid var(--vu-line);
+    border-top: 2px solid var(--vu-navy);
+    border-radius: var(--vu-radius);
+}
+body.woocommerce-account .woocommerce .button {
+    background: var(--vu-navy);
+    border-radius: var(--vu-radius);
+}
+body.woocommerce-account .woocommerce .button:hover { background: var(--vu-navy-deep); }
+
+/* =========================================================
+   12. FOOTER (chuyen tu functions.php, doi sang navy cho dong bo)
+   ========================================================= */
+.venus-footer {
+    position: relative;
+    background-color: var(--vu-navy-deep);
+    background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, .02) 0 2px, transparent 2px 6px);
+    color: #DCE2E8;
+    padding: 64px 25px 0;
+    margin-top: 0;
+}
+.venus-footer::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--vu-stitch);
+    opacity: .7;
+}
+.venus-footer-container {
+    max-width: 1180px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr 1.2fr;
+    gap: 40px;
+}
+.venus-footer-column h2 {
+    font-family: var(--vu-font-display);
+    font-weight: 600;
+    letter-spacing: .06em;
+    color: var(--vu-brass-soft);
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+.venus-footer-column h3 {
+    color: var(--vu-brass-soft);
+    font-size: 13px;
+    letter-spacing: .1em;
+    margin-bottom: 18px;
+}
+.venus-footer-column p,
+.venus-footer-column li {
+    color: #DCE2E8;
+    font-size: 14px;
+    line-height: 1.9;
+}
+.venus-footer-column ul { list-style: none; padding: 0; margin: 0; }
+.venus-footer-column a {
+    color: #DCE2E8;
+    text-decoration: none;
+    display: inline-block;
+    transition: color var(--vu-fast) var(--vu-ease), transform var(--vu-fast) var(--vu-ease);
+}
+.venus-footer-column a:hover {
+    color: var(--vu-brass-soft);
+    transform: translateX(3px);
+}
+.venus-footer-bottom {
+    max-width: 1180px;
+    margin: 44px auto 0;
+    padding: 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, .1);
+    text-align: center;
+    color: #A9B4C0;
+    font-size: 13px;
+}
+@media (max-width: 768px) {
+    .venus-footer-container { grid-template-columns: 1fr 1fr; gap: 28px; }
+}
+@media (max-width: 480px) {
+    .venus-footer-container { grid-template-columns: 1fr; }
+}
+
+/* =========================================================
+   13. HIEN DAN KHI CUON (chi bat khi JS chay, xem functions.php)
+   ========================================================= */
+.vu-js .vu-reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 600ms var(--vu-ease), transform 600ms var(--vu-ease);
+    transition-delay: var(--vu-delay, 0ms);
+}
+.vu-js .vu-reveal.is-in {
+    opacity: 1;
+    transform: none;
+}
+
+/* =========================================================
+   14. GIAM CHUYEN DONG
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-delay: 0ms !important;
+        transition-duration: .01ms !important;
+        transition-delay: 0ms !important;
+    }
+    .vu-js .vu-reveal { opacity: 1; transform: none; }
+}
+
+/* =========================================================
+   15. MOBILE
+   ========================================================= */
+@media (max-width: 700px) {
+    body .venus-home .vh-hero { padding: 72px 7% 64px; }
+    body .venus-home .vh-section,
+    body .venus-products-section { padding: 56px 0; }
+    body .tv3-form { padding: 24px 20px; }
+    body .venus-home .vh-btn { margin-right: 6px; }
+}
+
+/* =========================================================
+   16. GIU LAI TU BAN CU (TV2)
+   ========================================================= */
+.tv2-banner { width: 100%; padding: 60px 24px; background: var(--vu-shirting); text-align: center; }
+.tv2-title { font-family: var(--vu-font-display); font-size: 36px; font-weight: 600; margin-bottom: 20px; color: var(--vu-navy); }
+.tv2-btn {
+    display: inline-block; padding: 12px 24px;
+    background: var(--vu-brass); color: var(--vu-navy);
+    text-decoration: none; border-radius: var(--vu-radius); font-weight: 600;
+    transition: background-color var(--vu-fast) var(--vu-ease);
+}
+.tv2-btn:hover { background: var(--vu-brass-soft); color: var(--vu-navy); }
+.tv2-banner img { max-width: 100%; height: auto; }
