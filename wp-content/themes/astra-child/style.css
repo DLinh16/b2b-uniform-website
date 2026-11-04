@@ -3,25 +3,38 @@ Theme Name:   Astra Child - Nhom 5
 Template:     astra
 Description:  Child theme cho website dong phuc doanh nghiep
 Author:       Nhom 5
-Version:      1.0.0
+Version:      1.1.0
 License:      GPLv2 or later
 Text Domain:  astra-child
 */
 
+/* Token mau (--vu-*) va phan lon giao dien nam trong giaodien.css. */
+
 /* ===== Shortcode thong bao ===== */
-.nhom5-notice { padding: 12px 16px; border-radius: 6px; margin: 16px 0; font-weight: 500; }
-.nhom5-info    { background: #e7f3ff; border-left: 4px solid #1e73be; }
-.nhom5-success { background: #e6f7e9; border-left: 4px solid #2e9e4f; }
-.nhom5-warning { background: #fff4e0; border-left: 4px solid #f0a020; }
+.nhom5-notice {
+    padding: 12px 16px; margin: 16px 0;
+    border: 1px solid; border-radius: 4px; font-weight: 500;
+}
+.nhom5-info    { background: #EEF2F6; border-color: #C5D1DD; color: #102B46; }
+.nhom5-success { background: #ECF5EE; border-color: #BCD9C3; color: #1E5631; }
+.nhom5-warning { background: #FBF4E6; border-color: #E6D2A8; color: #6B4F1D; }
 
 /* ===== Nut Back-to-top ===== */
 #nhom5-btt {
-    display: none; position: fixed; bottom: 24px; right: 24px; z-index: 999;
-    width: 44px; height: 44px; border: none; border-radius: 50%;
-    background: #1e73be; color: #fff; font-size: 20px; cursor: pointer;
+    position: fixed; bottom: 24px; right: 24px; z-index: 999;
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 1px solid #C9A45C;
+    background: #102B46; color: #E3C889; font-size: 18px; cursor: pointer;
+    display: grid; place-items: center;
+    opacity: 0; visibility: hidden; transform: translateY(8px);
+    transition: opacity 220ms ease, transform 220ms ease, visibility 0s 220ms, background-color 200ms ease;
 }
-#nhom5-btt.show { display: block; }
-#nhom5-btt:hover { background: #155a94; }
-/* ===== Nut Yeu cau bao gia ===== */
-.nhom5-btn-baogia { background: #1e73be; color: #fff; padding: 10px 20px; border-radius: 6px; display: inline-block; }
-.nhom5-btn-baogia:hover { background: #155a94; color: #fff; }
+#nhom5-btt.show {
+    opacity: 1; visibility: visible; transform: none;
+    transition: opacity 220ms ease, transform 220ms ease, visibility 0s, background-color 200ms ease;
+}
+#nhom5-btt:hover { background: #0B1F33; }
+
+/* ===== Nut Yeu cau bao gia (mau chinh nam trong giaodien.css) ===== */
+.nhom5-btn-baogia { background: #C9A45C; color: #102B46; padding: 12px 24px; border-radius: 4px; display: inline-block; }
+.nhom5-btn-baogia:hover { background: #E3C889; color: #102B46; }
